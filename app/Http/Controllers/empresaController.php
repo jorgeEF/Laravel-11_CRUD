@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Empresa;
 
 class empresaController extends Controller
 {
     public function index()
     {
         $empresas = Empresa::all();
-        if(!$empresas){
-            return "No hay empresas registradas";
-        }
-        return $empresas;
+        return view('empresas.index', ['empresas' => $empresas]);
     }
 
     public function show($id)
     {
         $empresa = Empresa::find($id);
-        if(!$empresa){
-            return "Empresa no encontrada";
+        if (!$empresa) {
+            abort(404); // Si no encuentra la empresa, devuelve un error 404.
         }
-        return $empresa;
+
+        //dd($empresa);
+
+        return view('empresas.show', ['empresa' => $empresa]);
     }
 
     public function store(Empresa $empresa)
