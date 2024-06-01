@@ -1,18 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmpresaController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 // empresas
-Route::get('/empresas/', [App\Http\Controllers\empresaController::class, 'index']);
-Route::get('/empresas/{id}', [App\Http\Controllers\empresaController::class, 'show']);
-Route::post('/empresas', [App\Http\Controllers\empresaController::class, 'store']);
-Route::put('/empresas/{id}', [App\Http\Controllers\empresaController::class, 'update']);
-Route::patch('/empresas/{id}', [App\Http\Controllers\empresaController::class, 'updatePartial']);
-Route::delete('/empresas/{id}', [App\Http\Controllers\empresaController::class, 'delete']);
+Route::get('/empresas/create', [EmpresaController::class, 'create'])->name('empresas.create');
+Route::get('/empresas/{id}/edit', [EmpresaController::class, 'edit'])->name('empresas.edit');
+Route::get('/empresas/{id}', [EmpresaController::class, 'show'])->name('empresas.show');
+Route::get('/empresas', [EmpresaController::class, 'index'])->name('empresas.index');
+Route::post('/empresas', [EmpresaController::class, 'store'])->name('empresas.store');
+Route::put('/empresas/{id}', [EmpresaController::class, 'update'])->name('empresas.update');
+Route::patch('/empresas/{id}', [EmpresaController::class, 'updatePartial'])->name('empresas.updatePartial');
+Route::delete('/empresas/{id}', [EmpresaController::class, 'delete'])->name('empresas.delete');
 
 Auth::routes();
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Empresa;
 
 class empresaController extends Controller
@@ -25,9 +26,14 @@ class empresaController extends Controller
         return view('empresas.show', ['empresa' => $empresa]);
     }
 
-    public function store(Empresa $empresa)
+    public function create()
     {
-        $validator = Validator::make($empresa->all(), [
+        return view('empresas.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'razon_social' => 'required',
             'nombre_fantasia' => 'required',
             'cuit' => 'required|numeric|digits:11|unique:empresa,cuit',
@@ -35,130 +41,123 @@ class empresaController extends Controller
         ]);
 
         if ($validator->fails()){
-            return $validator->errors();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $empresa = Empresa::create([
-            'razon_social' => $empresa->razon_social,
-            'nombre_fantasia' => $empresa->nombre_fantasia,
-            'cuit' => $empresa->cuit,
-            "email" => $empresa->email,
-            'provincia' => $empresa->provincia,
-            'ciudad' => $empresa->ciudad,
-            'domicilio' => $empresa->domicilio,
-            'telefono' => $empresa->telefono,
-            'estado' => $empresa->estado
+            'razon_social' => $request->razon_social,
+            'nombre_fantasia' => $request->nombre_fantasia,
+            'cuit' => $request->cuit,
+            "email" => $request->email,
+            'provincia' => $request->provincia,
+            'ciudad' => $request->ciudad,
+            'domicilio' => $request->domicilio,
+            'telefono' => $request->telefono,
+            'estado' => $request->estado
         ]);
 
         if (!$empresa) {
-            return "Error al crear la empresa";
+            redirect()->route('empresas.index')->with('message', 'Error al crear la empresa');
         }
-        return "La empresa fue creada";
+        return redirect()->route('empresas.index')->with('message', 'La empresa fue creada con éxito');
     }
 
-    public function update(Empresa $empresaActualizada, $id)
+    public function edit($id)
     {
-        $empresaOriginal = Empresa::find($id);
+        $empresa = Empresa::find($id);
 
-        if (!$empresaOriginal) {
-            return 'Empresa no encontrada.';
+        if (!$empresa) {
+            return redirect()->route('empresas.index')->with('message', 'Empresa no encontrada.');
         }
 
-        $validator = Validator::make($empresaActualizada->all(), [
+        return view('empresas.edit', ['empresa' => $empresa]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $empresa = Empresa::find($id);
+
+        if (!$empresa) {
+            return redirect()->route('empresas.index')->with('message', 'Empresa no encontrada.');
+        }
+
+        $validator = Validator::make($request->all(), [
             'razon_social' => 'required',
             'nombre_fantasia' => 'required',
-            'cuit' => 'required|numeric|digits:11|unique:empresa,cuit',
-            'email' => 'required|email|unique:empresa'
+            'cuit' => 'required|numeric|digits:11|unique:empresas,cuit,' . $id,
+            'email' => 'required|email|unique:empresas,email,' . $id,
+            'estado' => 'required'
         ]);
 
-        if ($validator->fails()){
-            return $validator->errors();
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $empresaOriginal->razon_social = $empresaActualizada->razon_social;
-        $empresaOriginal->nombre_fantasia = $empresaActualizada->nombre_fantasia;
-        $empresaOriginal->cuit = $empresaActualizada->cuit;
-        $empresaOriginal->email = $empresaActualizada->email;
-        $empresaOriginal->provincia = $empresaActualizada->provincia;
-        $empresaOriginal->ciudad = $empresaActualizada->ciudad;
-        $empresaOriginal->domicilio = $empresaActualizada->domicilio;
-        $empresaOriginal->telefono = $empresaActualizada->telefono;
-        $empresaOriginal->estado = $empresaActualizada->estado;
+        $empresa->update([
+            'razon_social' => $request->razon_social,
+            'nombre_fantasia' => $request->nombre_fantasia,
+            'cuit' => $request->cuit,
+            'email' => $request->email,
+            'provincia' => $request->provincia,
+            'ciudad' => $request->ciudad,
+            'domicilio' => $request->domicilio,
+            'telefono' => $request->telefono,
+            'estado' => $request->estado,
+        ]);
 
-        $empresaOriginal->save();
-
-        return 'La empresa fue actualizada';
-
+        return redirect()->route('empresas.index')->with('message', 'La empresa fue actualizada con éxito');
     }
 
-    public function updatePartial(Empresa $empresaActualizada, $id)
+    public function updatePartial(Request $request, $id)
     {
-        $empresaOriginal = Empresa::find($id);
+        $empresa = Empresa::find($id);
 
-        if (!$empresaOriginal) {
-            return 'Empresa no encontrada.';
+        if (!$empresa) {
+            return redirect()->route('empresas.index')->with('message', 'Empresa no encontrada.');
         }
 
-        $validator = Validator::make($empresaActualizada->all(), [
-            'cuit' => 'numeric|digits:11|unique:empresa,cuit',
-            'email' => 'email|unique:empresa'
+        \Log::info('Updating empresa ID: ' . $id);
+
+        $validator = Validator::make($request->all(), [
+            'cuit' => 'sometimes|numeric|digits:11|unique:empresa,cuit,' . $id,
+            'email' => 'sometimes|email|unique:empresa,email,' . $id
         ]);
 
-        if ($validator->fails()){
-            return $validator->errors();
+        if ($validator->fails()) {
+            \Log::error('Validation failed: ', $validator->errors()->toArray());
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if ($empresaActualizada->has('razon_social')){
-            $empresaOriginal->razon_social = $empresaActualizada->razon_social;
-        }
+        $data = $request->only([
+            'razon_social',
+            'nombre_fantasia',
+            'cuit',
+            'email',
+            'provincia',
+            'ciudad',
+            'domicilio',
+            'telefono',
+            'estado'
+        ]);
 
-        if ($empresaActualizada->has('nombre_fantasia')){
-            $empresaOriginal->nombre_fantasia = $empresaActualizada->nombre_fantasia;
-        }
+        \Log::info('Data to update: ', $data);
 
-        if ($empresaActualizada->has('cuit')){
-            $empresaOriginal->cuit = $empresaActualizada->cuit;
-        }
+        $empresa->update($data);
 
-        if ($empresaActualizada->has('email')){
-            $empresaOriginal->email = $empresaActualizada->email;
-        }
-
-        if ($empresaActualizada->has('provincia')){
-            $empresaOriginal->provincia = $empresaActualizada->provincia;
-        }
-
-        if ($empresaActualizada->has('ciudad')){
-            $empresaOriginal->ciudad = $empresaActualizada->ciudad;
-        }
-
-        if ($empresaActualizada->has('domicilio')){
-            $empresaOriginal->domicilio = $empresaActualizada->domicilio;
-        }
-
-        if ($empresaActualizada->has('telefono')){
-            $empresaOriginal->telefono = $empresaActualizada->telefono;
-        }
-
-        if ($empresaActualizada->has('estado')){
-            $empresaOriginal->estado = $empresaActualizada->estado;
-        }
-
-        $empresaOriginal->save();
-
-        return 'La empresa fue actualizada';
+        return redirect()->route('empresas.index')->with('message', 'La empresa fue actualizada con éxito');
     }
+
 
     public function delete($id)
     {
         $empresa = Empresa::find($id);
 
-        if (!$empresa) {
-            return 'La empresa no fue encontrada.';
-        }
+    if (!$empresa) {
+        return redirect()->route('empresas.index')->with('message', 'Empresa no encontrada.');
+    }
 
-        $empresa->delete();
+    $empresa->delete();
 
-        return 'La empresa fue eliminada.';
+    return redirect()->route('empresas.index')->with('message', 'La empresa fue eliminada con éxito.');
     }
 }
