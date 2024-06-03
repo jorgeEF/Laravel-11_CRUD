@@ -13,13 +13,19 @@
             </div>
         @endif
 
-        @isset ($message)
-            <div class="alert alert-info">
-                <ul>
-                    <li>{{ $message }}</li>
-                </ul>
+        <!-- Mostrar mensaje de éxito -->
+        @if (session('message'))
+            <div class="toast-container position-fixed bottom-0 end-auto p-3" id="toast-container">
+                <div id="success-toast" class="toast align-items-center text-bg-info border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ session('message') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
             </div>
-        @endisset
+        @endif
 
         <button type="button" class="btn btn-primary" onclick="location.href='{{ route('empresas.create') }}'">Nueva empresa</button>
 
@@ -59,4 +65,18 @@
         </table>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastEl = document.getElementById('success-toast');
+            if (toastEl) {
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+
+                setTimeout(function () {
+                    toast.hide();
+                }, 3000); // 3 segundos
+            }
+        });
+    </script>
 @endsection
