@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('razon_social');
             $table->string('nombre_fantasia');
-            $table->string('cuit');
-            $table->string('email');
+            $table->string('cuit')->unique();
+            $table->string('email')->unique();
             $table->string('provincia')->nullable();
             $table->string('ciudad')->nullable();
             $table->string('domicilio')->nullable();

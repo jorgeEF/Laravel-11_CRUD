@@ -22,4 +22,9 @@ class Empresa extends Model
         'telefono',
         'estado'
     ];
+
+    public function rubros()
+    {
+        return $this->belongsToMany(Rubro::class, 'empresa_rubro');
+    }
 }

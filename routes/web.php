@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\RubroController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +17,9 @@ Route::post('/empresas', [EmpresaController::class, 'store'])->name('empresas.st
 Route::put('/empresas/{id}', [EmpresaController::class, 'update'])->name('empresas.update');
 Route::patch('/empresas/{id}', [EmpresaController::class, 'updatePartial'])->name('empresas.updatePartial');
 Route::delete('/empresas/{id}', [EmpresaController::class, 'destroy'])->name('empresas.destroy');
+
+// rubros
+Route::resource('rubros', RubroController::class);
 
 Auth::routes();
 

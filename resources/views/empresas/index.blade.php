@@ -27,7 +27,12 @@
             </div>
         @endif
 
-        <button type="button" class="btn btn-primary" onclick="location.href='{{ route('empresas.create') }}'">Nueva empresa</button>
+        <div class="container d-flex justify-content-center gap-2">
+            <button type="button" class="btn btn-primary" onclick="location.href='{{ route('empresas.create') }}'">Nueva empresa</button>
+            <button type="button" class="btn btn-success" onclick="location.href='{{ route('rubros.index') }}'">Rubros</button>
+        </div>
+
+
 
 
         <h2>Listado de Empresas</h2>
@@ -38,6 +43,7 @@
                     <th>Razon Social</th>
                     <th>Nombre</th>
                     <th>CUIT</th>
+                    <th>Rubros</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -48,6 +54,11 @@
                         <td>{{ $empresa->razon_social }}</td>
                         <td>{{ $empresa->nombre_fantasia }}</td>
                         <td>{{ $empresa->cuit }}</td>
+                        <td>
+                            @foreach($empresa->rubros as $rubro)
+                                {{ $rubro->nombre }}
+                            @endforeach
+                        </td>
                         <td>{{ $empresa->estado }}</td>
                         <td>
                             <a href="{{ route('empresas.show', $empresa->id) }}" class="btn btn-sm btn-primary">Ver</a>

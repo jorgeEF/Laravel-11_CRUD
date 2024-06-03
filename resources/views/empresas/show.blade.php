@@ -11,6 +11,7 @@
                 <th>Razon Social</th>
                 <th>Nombre</th>
                 <th>CUIT</th>
+                <th>Rubros</th>
                 <th>Estado</th>
             </tr>
         </thead>
@@ -19,6 +20,11 @@
                 <td>{{ $empresa->razon_social }}</td>
                 <td>{{ $empresa->nombre_fantasia }}</td>
                 <td>{{ $empresa->cuit }}</td>
+                <td>
+                    @foreach($empresa->rubros as $rubro)
+                        {{ $rubro->nombre }}
+                    @endforeach
+                </td>
                 <td>{{ $empresa->estado }}</td>
             </tr>
         </tbody>

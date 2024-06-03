@@ -40,6 +40,17 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label for="rubros">Rubros:</label>
+                <select name="rubros[]" id="rubros" class="form-control" multiple>
+                    @foreach($rubros as $rubro)
+                        <option value="{{ $rubro->id }}">{{ $rubro->nombre }}</option>
+                    @endforeach
+                </select>
+                @error('rubros')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="text" class="form-control" id="email" name="email">
                 @error('email')
@@ -59,6 +70,5 @@
                 <a href="{{ route('empresas.index') }}" class="btn btn-secondary">Volver</a>
             </div>
         </form>
-
     </div>
 @endsection

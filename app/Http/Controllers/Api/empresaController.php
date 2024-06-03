@@ -57,7 +57,7 @@ class EmpresaController extends Controller
             return response()->json($data, 400);
         }
 
-        $empresa = Empresa::create([
+        /* $empresa = Empresa::create([
             'razon_social' => $request->razon_social,
             'nombre_fantasia' => $request->nombre_fantasia,
             'cuit' => $request->cuit,
@@ -67,7 +67,9 @@ class EmpresaController extends Controller
             'domicilio' => $request->domicilio,
             'telefono' => $request->telefono,
             'estado' => $request->estado
-        ]);
+        ]); */
+
+        $empresa = Empresa::create($request->all());
 
         if (!$empresa) {
             $data = [
@@ -113,7 +115,9 @@ class EmpresaController extends Controller
             return response()->json($data, 400);
         }
 
-        $empresa->razon_social = $request->razon_social;
+        $empresa = Empresa::update($request->all());
+
+        /* $empresa->razon_social = $request->razon_social;
         $empresa->nombre_fantasia = $request->nombre_fantasia;
         $empresa->cuit = $request->cuit;
         $empresa->email = $request->email;
@@ -121,7 +125,7 @@ class EmpresaController extends Controller
         $empresa->ciudad = $request->ciudad;
         $empresa->domicilio = $request->domicilio;
         $empresa->telefono = $request->telefono;
-        $empresa->estado = $request->estado;
+        $empresa->estado = $request->estado; */
 
         $empresa->save();
 
@@ -160,7 +164,7 @@ class EmpresaController extends Controller
             return response()->json($data, 400);
         }
 
-        if ($request->has('razon_social')){
+        /* if ($request->has('razon_social')){
             $empresa->razon_social = $request->razon_social;
         }
 
@@ -195,6 +199,24 @@ class EmpresaController extends Controller
         if ($request->has('estado')){
             $empresa->estado = $request->estado;
         }
+
+        $empresa->save(); */
+
+        $datosActualizados = $request->only([
+            'razon_social',
+            'nombre_fantasia',
+            'cuit',
+            'email',
+            'provincia',
+            'ciudad',
+            'domicilio',
+            'telefono',
+            'estado'
+        ]);
+
+        \Log::info('Data to update: ', $data);
+
+        $empresa->update($datosActualizados);
 
         $empresa->save();
 

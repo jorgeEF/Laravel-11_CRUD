@@ -18,7 +18,7 @@
 
         <form action="{{ route('empresas.updatePartial', $empresa->id) }}" method="POST">
             @csrf
-            @method('PATCH')
+            @method('PUT')
 
             <div class="form-group">
                 <label for="razon_social">Razon Social:</label>
@@ -43,6 +43,18 @@
                 <input type="text" class="form-control" id="cuit" name="cuit"
                     value="{{ old('cuit', $empresa->cuit) }}">
                 @error('cuit')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="rubros">Rubros:</label>
+                <select name="rubros[]" id="rubros" class="form-control" multiple>
+                    @foreach($rubros as $rubro)
+                        <option value="{{ $rubro->id }}">{{ $rubro->nombre }}</option>
+                    @endforeach
+                </select>
+                @error('rubros')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
