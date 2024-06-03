@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Empresa;
 
-class empresaController extends Controller
+class EmpresaController extends Controller
 {
     public function index()
     {

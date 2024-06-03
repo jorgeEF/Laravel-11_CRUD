@@ -13,6 +13,14 @@
             </div>
         @endif
 
+        @isset ($message)
+            <div class="alert alert-info">
+                <ul>
+                    <li>{{ $message }}</li>
+                </ul>
+            </div>
+        @endisset
+
         <button type="button" class="btn btn-primary" onclick="location.href='{{ route('empresas.create') }}'">Nueva empresa</button>
 
 
