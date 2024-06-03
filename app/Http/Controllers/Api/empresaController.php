@@ -44,8 +44,8 @@ class EmpresaController extends Controller
         $validator = Validator::make($request->all(), [
             'razon_social' => 'required',
             'nombre_fantasia' => 'required',
-            'cuit' => 'required|numeric|digits:11|unique:empresa,cuit',
-            'email' => 'required|email|unique:empresa'
+            'cuit' => 'required|numeric|digits:11|unique:empresas,cuit',
+            'email' => 'required|email|unique:empresas'
         ]);
 
         if ($validator->fails()){
@@ -100,8 +100,8 @@ class EmpresaController extends Controller
         $validator = Validator::make($request->all(), [
             'razon_social' => 'required',
             'nombre_fantasia' => 'required',
-            'cuit' => 'required|numeric|digits:11|unique:empresa,cuit',
-            'email' => 'required|email|unique:empresa'
+            'cuit' => 'required|numeric|digits:11|unique:empresas,cuit',
+            'email' => 'required|email|unique:empresas'
         ]);
 
         if ($validator->fails()){
@@ -147,8 +147,8 @@ class EmpresaController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'cuit' => 'numeric|digits:11|unique:empresa,cuit',
-            'email' => 'email|unique:empresa'
+            'cuit' => 'numeric|digits:11|unique:empresas,cuit',
+            'email' => 'email|unique:empresas'
         ]);
 
         if ($validator->fails()){
