@@ -52,7 +52,7 @@
                         <td>
                             <a href="{{ route('empresas.show', $empresa->id) }}" class="btn btn-sm btn-primary">Ver</a>
                             <a href="{{ route('empresas.edit', $empresa->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('empresas.delete', $empresa->id) }}" method="POST" style="display:inline"
+                            <form action="{{ route('empresas.destroy', $empresa->id) }}" method="POST" style="display:inline"
                                 onsubmit="return confirm('¿Seguro desea eliminar la empresa?');">
                                 @csrf
                                 @method('DELETE')

@@ -15,7 +15,7 @@ Route::get('/empresas', [EmpresaController::class, 'index'])->name('empresas.ind
 Route::post('/empresas', [EmpresaController::class, 'store'])->name('empresas.store');
 Route::put('/empresas/{id}', [EmpresaController::class, 'update'])->name('empresas.update');
 Route::patch('/empresas/{id}', [EmpresaController::class, 'updatePartial'])->name('empresas.updatePartial');
-Route::delete('/empresas/{id}', [EmpresaController::class, 'delete'])->name('empresas.delete');
+Route::delete('/empresas/{id}', [EmpresaController::class, 'destroy'])->name('empresas.destroy');
 
 Auth::routes();
 

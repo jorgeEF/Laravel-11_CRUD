@@ -17,4 +17,4 @@ Route::put('empresas/{id}', [EmpresaController::class, 'update']);
 
 Route::patch('empresas/{id}', [EmpresaController::class, 'updatePartial']);
 
-Route::delete('empresas/{id}', [EmpresaController::class, 'delete']);
+Route::delete('empresas/{id}', [EmpresaController::class, 'destroy']);

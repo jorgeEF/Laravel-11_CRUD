@@ -148,7 +148,7 @@ class EmpresaController extends Controller
     }
 
 
-    public function delete($id)
+    public function destroy($id)
     {
         $empresa = Empresa::find($id);
 
